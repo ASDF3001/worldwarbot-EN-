@@ -1,4 +1,4 @@
-# worldwarbot
-## 世界大戦bot(日本語版)
-gemini使って開発
-https://worldwarbot.pages.dev
+# 世界大戦bot (World War Bot - JP) 🌍⚔️
+
+サーバーのメンバーたちと領土を奪い合い、世界征服を目指すDiscordゲームBotです。
+現在、累計導入サーバーの合計人数が **970人突破！**
