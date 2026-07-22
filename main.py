@@ -17,7 +17,6 @@ import logging
 import colorsys
 import shutil
 from dotenv import load_dotenv
-import db_sync
 
 # ==============================================================================
 # 全世界戦争Bot - 究極完全統合版 (絵文字削減 / Tips&宣伝機能 / 防衛費複数選択対応)
@@ -126,8 +125,6 @@ try:
 except Exception as e:
     logger.error(f"Failed to load countries_data.csv: {e}")
     VALID_CODES = set()
-
-db_sync.download_db()
 # ==============================================================================
 # データベース接続・初期化
 # ==============================================================================
@@ -848,41 +845,6 @@ class AttackTargetModal(discord.ui.Modal, title="Target Selection"):
 # ==============================================================================
 # バックグラウンドタスク (定時給付・リセット・CLI入力)
 # ==============================================================================
-async def console_input_task():
-    loop = asyncio.get_running_loop()
-    print("\n=====================================================")
-    print("💻 [Terminal Communication Feature] is enabled!")
-    print("Format: <Channel ID> <Message>")
-    print("Example: 123456789012345678 Hello!")
-    print("=====================================================\n")
-    while True:
-        try:
-            line = await loop.run_in_executor(None, sys.stdin.readline)
-            if not line:
-                await asyncio.sleep(1)
-                continue
-            line = line.strip()
-            if not line: continue
-            
-            parts = line.split(" ", 1)
-            if len(parts) == 2:
-                channel_id_str, message = parts
-                try:
-                    channel_id = int(channel_id_str)
-                    channel = bot.get_channel(channel_id)
-                    if channel:
-                        asyncio.create_task(channel.send(message))
-                        print(f"✅ Sent to channel {channel_id}: {message}")
-                    else:
-                        print(f"❌ Channel {channel_id} not found or Bot lacks access.")
-                except ValueError:
-                    print("❌ Channel ID must be a number.")
-            else:
-                print("❌ Invalid format. Example: 1234567890 Hello!")
-        except Exception as e:
-            logger.error(f"Error in console input task: {e}")
-            await asyncio.sleep(1)
-
 @tasks.loop(time=[datetime.time(hour=7, tzinfo=datetime.timezone.utc), datetime.time(hour=19, tzinfo=datetime.timezone.utc)])
 async def scheduled_tasks():
     now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -965,13 +927,6 @@ async def update_presence():
         total_members = sum(guild.member_count for guild in bot.guilds if guild.member_count)
         await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{total_members} users"))
     except: pass
-
-    # 【追加】10分おきにSupabaseへデータを自動セーブ
-    try:
-        # 非同期処理を邪魔しないように、バックグラウンドスレッドで同期を実行
-        await bot.loop.run_in_executor(None, db_sync.upload_db)
-    except Exception as e:
-        logger.error(f"[Sync] Scheduled upload error: {e}")
 
 async def send_greeting_message(channel: discord.TextChannel):
     embed = discord.Embed(title="Welcome to Global War Bot", description="Thank you for adding the bot!\n\n**[For Admins]**\nRun `/op setup` to check all configuration commands.\n\n**[For Players]**\nCheck `/help` for rules, and `/gui` for easy actions!", color=0x2ecc71)
@@ -1692,12 +1647,6 @@ async def on_app_command_error(interaction: discord.Interaction, error: app_comm
 @bot.event
 async def on_ready():
     logger.info(f"Bot is online: {bot.user}")
-    
-    # 【追加】起動時にSupabaseからデータをダウンロードして最新に復元
-    try:
-        await bot.loop.run_in_executor(None, db_sync.download_db)
-    except Exception as e:
-        logger.error(f"[Sync] Error downloading on startup: {e}")
 
     try: 
         await bot.tree.sync()
@@ -1705,8 +1654,6 @@ async def on_ready():
     except Exception as e: logger.error(f"Command sync error: {e}")
     if not scheduled_tasks.is_running(): scheduled_tasks.start()
     if not update_presence.is_running(): update_presence.start()
-    
-    bot.loop.create_task(console_input_task())
 
 if __name__ == "__main__":
     if not BOT_TOKEN: print("[Error] DISCORD_BOT_TOKEN is not set in the .env file.")
