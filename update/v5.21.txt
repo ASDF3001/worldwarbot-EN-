@@ -1,0 +1,15 @@
+[World War Bot v5.21]
+Global Live Web Gallery & Major Performance & Stability Update!
+
+■ 🌐 Global Live Map Gallery
+- Live web dashboard displaying ongoing world maps and territory rankings across servers!
+- Anonymous and privacy-friendly: Server and player names are safely protected.
+- Latest maps are automatically rendered and synced to cloud storage.
+
+■ ⚡ System Stability & Database Optimizations
+- Optimized SQLite connection lifecycles and transactions to completely eliminate database lock contention.
+- Decoupled CPU-intensive map rendering and cloud sync into separate background workers.
+- Enhanced fault-tolerance for Discord 3-second slash command timeouts.
+
+■ 🔄 Presence Status Rotation
+- Optimized status rotation to 10-second intervals (Total users, servers, ping, and command usage).
