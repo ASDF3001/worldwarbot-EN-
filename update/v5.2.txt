@@ -1,23 +1,19 @@
-【世界大戦Bot v5.2】
-大型アップデート！新しい駆け引きやロールプレイを楽しめる機能を追加し、システム全体を大幅に整理しました。
+[World War Bot v5.2]
+Major Update! Added exciting diplomatic strategies, roleplay features, and system optimizations.
 
-■ 📰 デイリー世界新聞 (World Times) の創刊
-・毎日の定時給付時に、AI(Gemini 3.5 Flash Lite)がプレイヤー間の争いや外交の出来事をドラマチックな新聞記事として自動作成し、配信するようになりました！
+■ 📰 The World Times - Daily AI Newspaper
+- During daily payouts, Gemini AI automatically generates dramatic, engaging news articles covering recent global conflict and diplomacy!
 
-■ 🕊️ 不戦協定 (Peace Treaty) の実装
-・新コマンド `/peace` を追加しました。指定したプレイヤーと向こう24時間の相互不可侵条約を結ぶことができます。
+■ 🕊️ Peace Treaty (/peace)
+- Added the `/peace` command: Sign a 24-hour Non-Aggression Pact with any player to secure your borders.
 
-■ 🏅 称号・実績システムの拡張
-・侵略成功やスパイ成功などの隠し条件を満たすと称号を獲得できるように！
-・獲得した称号は `/trophy equip` で装備でき、ステータス画面で他のプレイヤーに自慢できます。
+■ 🏅 Title & Trophy System Expansion
+- Fulfill hidden conditions (successful invasions, spy missions, etc.) to earn exclusive Titles!
+- Equip unlocked titles via `/trophy_equip` to show off on your national profile.
 
-■ 🔄 コマンドのグループ化と整理
-・コマンド数が多くなり見づらくなっていたため、関連するコマンドをグループにまとめました。
-  - `/un` グループ (list, join, leave, invite)
-  - `/camp` グループ (list, create, join, invite)
-  - `/trophy` グループ (show, equip)
-  - `/op` グループ (管理者用の設定コマンドを一括化)
+■ 🔄 Command Organization
+- Re-organized commands and updated `/command` GUI menu for easier access to alliances, UN, and faction commands.
 
-■ 🤖 システム・最適化
-・Botの「視聴中」ステータスが3秒ごとに切り替わり、参加人数やPing、総コマンド実行回数などの統計を表示するようになりました。
-・Gemini APIの通信処理を刷新し、安定性と速度を向上させました。
+■ 🤖 System & Optimization
+- Bot presence status now rotates every 10 seconds, showing total players, server count, latency, and command usage.
+- Refreshed Gemini API communications for enhanced reliability and performance.
